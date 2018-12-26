@@ -18,7 +18,10 @@
  */
 package es.mismocode.movies;
 
+import es.mismocode.movies.configuration.Properties;
 import es.mismocode.movies.controller.MainController;
+import es.mismocode.movies.services.FileReader;
+
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -69,7 +72,7 @@ public class MainApplication extends Application {
      */
     private Scene createScene(Pane mainPane) {
         Scene scene = new Scene(mainPane);
-        scene.getStylesheets().setAll(ClassLoader.getSystemResource("a/simple/pack/style/vista.css").toExternalForm());
+        scene.getStylesheets().setAll(ClassLoader.getSystemResource("es/mismocode/movies/style/vista.css").toExternalForm());
 
         return scene;
     }
@@ -83,7 +86,13 @@ public class MainApplication extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+    	test();
+        //launch(args);
+    }
+    
+    private static void test() {
+    	FileReader fileReader = new FileReader();
+    	System.out.println(fileReader.getMovies());
     }
 
 }
