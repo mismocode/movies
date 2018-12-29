@@ -37,4 +37,12 @@ public class Properties {
 	public String getResourcePath() {
 		return this.appProps.getProperty("file.resourcePath");
 	}
+	
+	public String getSavePathIconCountries() {
+		return this.appProps.getProperty("file.save.pathIconCountries");
+	}
+	
+	public String getSavePathImages() {
+		return this.appProps.getProperty("file.save.pathImages");
+	}
 }

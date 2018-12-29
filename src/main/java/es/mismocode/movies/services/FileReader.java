@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import es.mismocode.movies.configuration.Properties;
-import es.mismocode.movies.model.Movie;
+import es.mismocode.movies.model.MovieReader;
 
 public class FileReader {
 	
@@ -16,18 +16,18 @@ public class FileReader {
 		this.props = new Properties();
 	}
 	
-	public List<Movie> getMovies(){
+	public List<MovieReader> getMovies(){
 		return this.getFilesOfFolder(new File(this.props.getResourcePath()));
 	}
 	
-	private List<Movie> getFilesOfFolder(final File folder){
+	private List<MovieReader> getFilesOfFolder(final File folder){
 		if(folder != null && folder.exists() && folder.isDirectory()) {
 			final File[] files = folder.listFiles();
 			if(files != null && files.length > 0) {
-				List<Movie> result = new ArrayList<Movie>();
+				List<MovieReader> result = new ArrayList<MovieReader>();
 				for (final File file : files) {
 					if(file != null && file.exists() && file.isFile() && this.isAValidExtension(file.getName())){
-						result.add(new Movie(
+						result.add(new MovieReader(
 								file.getName(),
 								FilenameUtils.getExtension(file.getName()).toLowerCase(),
 								file.getAbsolutePath())
@@ -39,10 +39,10 @@ public class FileReader {
 				}
 				return result;
 			} else {
-				return new ArrayList<Movie>();
+				return new ArrayList<MovieReader>();
 			}
 		}
-		return new ArrayList<Movie>();
+		return new ArrayList<MovieReader>();
 	}
 	
 	private boolean isAValidExtension(final String filename) {

@@ -20,6 +20,8 @@ package es.mismocode.movies;
 
 import es.mismocode.movies.configuration.Properties;
 import es.mismocode.movies.controller.MainController;
+import es.mismocode.movies.model.Movie;
+import es.mismocode.movies.parser.FilmAffinityParser;
 import es.mismocode.movies.services.FileReader;
 
 import java.io.IOException;
@@ -91,8 +93,9 @@ public class MainApplication extends Application {
     }
     
     private static void test() {
-    	FileReader fileReader = new FileReader();
-    	System.out.println(fileReader.getMovies());
+    	FilmAffinityParser filmAffinityParser = new FilmAffinityParser();
+    	Movie movie = filmAffinityParser.getMovie("https://www.filmaffinity.com/es/film805243.html");
+    	System.out.println(movie.getCountries());
     }
 
 }
