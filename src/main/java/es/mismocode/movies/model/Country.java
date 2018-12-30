@@ -32,4 +32,9 @@ public class Country implements Serializable {
 	public String getExtension() {
 		return extension;
 	}
+
+	@Override
+	public String toString() {
+		return "Country [id=" + id + ", name=" + name + ", iconPath=" + iconPath + ", extension=" + extension + "]";
+	}
 }

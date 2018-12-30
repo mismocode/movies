@@ -22,6 +22,7 @@ public class Movie implements Serializable {
 	private List<String> directors;
 	private List<String> screenwriters;
 	private List<String> music;
+	private List<String> cast;
 	private List<String> producers;
 	private List<String> genres;
 	private String oficialWeb;
@@ -29,6 +30,15 @@ public class Movie implements Serializable {
 	private List<Score> scores;
 	
 	public Movie() {}
+
+	@Override
+	public String toString() {
+		return "Movie [url=" + url + ", imagePath=" + imagePath + ", title=" + title + ", originalTitle="
+				+ originalTitle + ", year=" + year + ", countries=" + countries + ", minutes=" + minutes
+				+ ", directors=" + directors + ", screenwriters=" + screenwriters + ", music=" + music + ", cast="
+				+ cast + ", producers=" + producers + ", genres=" + genres + ", oficialWeb=" + oficialWeb
+				+ ", synopsis=" + synopsis + ", scores=" + scores + "]";
+	}
 
 	public String getUrl() {
 		return url;
@@ -68,6 +78,10 @@ public class Movie implements Serializable {
 
 	public List<String> getMusic() {
 		return music;
+	}
+
+	public List<String> getCast() {
+		return cast;
 	}
 
 	public List<String> getProducers() {
@@ -128,6 +142,10 @@ public class Movie implements Serializable {
 
 	public void setMusic(List<String> music) {
 		this.music = music;
+	}
+
+	public void setCast(List<String> cast) {
+		this.cast = cast;
 	}
 
 	public void setProducers(List<String> producers) {

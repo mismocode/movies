@@ -21,10 +21,15 @@ package es.mismocode.movies;
 import es.mismocode.movies.configuration.Properties;
 import es.mismocode.movies.controller.MainController;
 import es.mismocode.movies.model.Movie;
+import es.mismocode.movies.model.MovieReader;
 import es.mismocode.movies.parser.FilmAffinityParser;
 import es.mismocode.movies.services.FileReader;
 
 import java.io.IOException;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -94,8 +99,22 @@ public class MainApplication extends Application {
     
     private static void test() {
     	FilmAffinityParser filmAffinityParser = new FilmAffinityParser();
-    	Movie movie = filmAffinityParser.getMovie("https://www.filmaffinity.com/es/film805243.html");
-    	System.out.println(movie.getCountries());
+    	Properties properties = new Properties();
+    	
+		FileReader fileReader = new FileReader();
+		List<MovieReader> movieReaders = fileReader.getMovies();
+		for(MovieReader movieReader : movieReaders) {
+			if(StringUtils.isNotBlank(movieReader.getFilename()) && StringUtils.isNotBlank(movieReader.getExtension())) {
+				String movieLink = filmAffinityParser.getURLOfMovie(movieReader.getFilename().toLowerCase().replace("." + movieReader.getExtension().toLowerCase(), ""));
+				if(movieLink != null) {
+					Movie movie = filmAffinityParser.getMovie(movieLink, null);
+					System.out.println(movieLink);
+					if(movie != null) {
+						movie.saveImages(properties.getSavePathIconCountries(), properties.getSavePathImages());
+						System.out.println(movie);
+					}
+				}
+			}
+		}
     }
-
 }

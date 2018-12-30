@@ -20,4 +20,9 @@ public class Score implements Serializable {
 	public Web getWeb() {
 		return web;
 	}
+
+	@Override
+	public String toString() {
+		return "Score [score=" + score + ", web=" + web + "]";
+	}
 }
