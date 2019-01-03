@@ -12,6 +12,12 @@ public class MovieMetaData implements Serializable {
 	private String audioSampleRate;
 	private String audioChannels;
 	
+	@Override
+	public String toString() {
+		return "MovieMetaData [videoCodec=" + videoCodec + ", videoWidth=" + videoWidth + ", videoHeight=" + videoHeight
+				+ ", audioCodec=" + audioCodec + ", audioSampleRate=" + audioSampleRate + ", audioChannels="
+				+ audioChannels + "]";
+	}
 	public String getVideoCodec() {
 		return videoCodec;
 	}

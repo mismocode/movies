@@ -30,6 +30,15 @@ public class Movie implements Serializable {
 	private List<Score> scores;
 	private MovieMetaData metaData;
 	
+	@Override
+	public String toString() {
+		return "Movie [url=" + url + ", imagePath=" + imagePath + ", title=" + title + ", originalTitle="
+				+ originalTitle + ", year=" + year + ", countries=" + countries + ", minutes=" + minutes
+				+ ", directors=" + directors + ", screenwriters=" + screenwriters + ", music=" + music + ", cast="
+				+ cast + ", producers=" + producers + ", genres=" + genres + ", oficialWeb=" + oficialWeb
+				+ ", synopsis=" + synopsis + ", scores=" + scores + ", metaData=" + metaData + "]";
+	}
+
 	public String getUrl() {
 		return url;
 	}

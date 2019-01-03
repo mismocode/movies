@@ -178,7 +178,12 @@ public class FilmAffinityParser implements WebParser {
 	private List<String> getMusic(final Document doc) {
 		if(doc.select("body dl.movie-info dt").eachText().contains("Música")) {
 			final Elements sub = doc.select("body dl.movie-info dd div.credits");
-			final Elements music = sub.get(1).select("span.nb span");
+			Elements music = null;
+			if(doc.select("body dl.movie-info dt").eachText().contains("Guion")) {
+				music = sub.get(1).select("span.nb span");
+			} else {
+				music = sub.get(0).select("span.nb span");
+			}
 			if(!music.isEmpty()) {
 				return music.eachText();
 			}
