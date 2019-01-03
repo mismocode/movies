@@ -28,18 +28,8 @@ public class Movie implements Serializable {
 	private String oficialWeb;
 	private String synopsis;
 	private List<Score> scores;
+	private MovieMetaData metaData;
 	
-	public Movie() {}
-
-	@Override
-	public String toString() {
-		return "Movie [url=" + url + ", imagePath=" + imagePath + ", title=" + title + ", originalTitle="
-				+ originalTitle + ", year=" + year + ", countries=" + countries + ", minutes=" + minutes
-				+ ", directors=" + directors + ", screenwriters=" + screenwriters + ", music=" + music + ", cast="
-				+ cast + ", producers=" + producers + ", genres=" + genres + ", oficialWeb=" + oficialWeb
-				+ ", synopsis=" + synopsis + ", scores=" + scores + "]";
-	}
-
 	public String getUrl() {
 		return url;
 	}
@@ -102,6 +92,10 @@ public class Movie implements Serializable {
 
 	public List<Score> getScores() {
 		return scores;
+	}
+
+	public MovieMetaData getMetaData() {
+		return metaData;
 	}
 
 	public void setUrl(String url) {
@@ -167,7 +161,11 @@ public class Movie implements Serializable {
 	public void setScores(List<Score> scores) {
 		this.scores = scores;
 	}
-	
+
+	public void setMetaData(MovieMetaData metaData) {
+		this.metaData = metaData;
+	}
+
 	public void saveImages(final String pathIconCountries, final String pathImage) {
 		if(pathIconCountries != null && this.getCountries() != null) {
 			for(Country country: this.getCountries()) {

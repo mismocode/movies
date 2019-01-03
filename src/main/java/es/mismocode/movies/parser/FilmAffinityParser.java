@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.similarity.CosineDistance;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,6 +23,8 @@ public class FilmAffinityParser implements WebParser {
 	
 	private static final String GOOGLE_BASE_URL_PATH = "http://www.google.com/search?q=";
 	private static final String BASE_URL_PATH = "https://www.filmaffinity.com";
+	
+	private CosineDistance cosineDistance = new CosineDistance();
 
 	@Override
 	public String getURLOfMovie(final String name) {
@@ -36,11 +39,15 @@ public class FilmAffinityParser implements WebParser {
 		        	    .get().select(".g>.r>a");
 				if(!links.isEmpty()) {
 					Element link = links.first();
-					if(link != null) {
-						String result = link.absUrl("href");
-						result = URLDecoder.decode(result.substring(result.indexOf('=') + 1, result.indexOf('&')), "UTF-8");
-						if(result.startsWith("http") && result.contains("www.filmaffinity.com/es/film")) {
-							return result;
+					if(link != null && link.hasText()) {
+						String googleTitleMovie = link.text();
+						if((googleTitleMovie.contains("- FilmAffinity") && cosineDistance.apply(name + "- FilmAffinity", googleTitleMovie) < 0.6) ||
+								(!googleTitleMovie.contains("- FilmAffinity") && cosineDistance.apply(name, googleTitleMovie) < 0.7)) {
+							String result = link.absUrl("href");
+							result = URLDecoder.decode(result.substring(result.indexOf('=') + 1, result.indexOf('&')), "UTF-8");
+							if(result.startsWith("http") && result.contains("www.filmaffinity.com/es/film")) {
+								return result;
+							}
 						}
 					}
 				}

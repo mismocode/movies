@@ -16,8 +16,8 @@ public class FileReader {
 		this.props = new Properties();
 	}
 	
-	public List<MovieReader> getMovies(){
-		return this.getFilesOfFolder(new File(this.props.getResourcePath()));
+	public List<MovieReader> getMovies(final String resourcePath){
+		return this.getFilesOfFolder(new File(resourcePath));
 	}
 	
 	private List<MovieReader> getFilesOfFolder(final File folder){

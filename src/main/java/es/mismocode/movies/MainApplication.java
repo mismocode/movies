@@ -27,8 +27,18 @@ import es.mismocode.movies.services.FileReader;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.xuggle.mediatool.IMediaReader;
+import com.xuggle.mediatool.ToolFactory;
+import com.xuggle.xuggler.IContainer;
+import com.xuggle.xuggler.IStream;
+import com.xuggle.xuggler.IStreamCoder;
+import com.xuggle.xuggler.ICodec;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -93,7 +103,7 @@ public class MainApplication extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    	test();
+    	test2();
         //launch(args);
     }
     
@@ -102,7 +112,7 @@ public class MainApplication extends Application {
     	Properties properties = new Properties();
     	
 		FileReader fileReader = new FileReader();
-		List<MovieReader> movieReaders = fileReader.getMovies();
+		List<MovieReader> movieReaders = fileReader.getMovies(properties.getResourcePath());
 		for(MovieReader movieReader : movieReaders) {
 			if(StringUtils.isNotBlank(movieReader.getFilename()) && StringUtils.isNotBlank(movieReader.getExtension())) {
 				String movieLink = filmAffinityParser.getURLOfMovie(movieReader.getFilename().toLowerCase().replace("." + movieReader.getExtension().toLowerCase(), ""));
@@ -116,5 +126,53 @@ public class MainApplication extends Application {
 				}
 			}
 		}
+    }
+    
+    private static void test2() {
+    	SortedSet<String> codecs = new TreeSet<String>();
+    	Properties properties = new Properties();
+    	
+		FileReader fileReader = new FileReader();
+		List<MovieReader> movieReaders = fileReader.getMovies("L:\\Movies\\");
+		//List<MovieReader> movieReaders = fileReader.getMovies(properties.getResourcePath());
+		
+		System.out.println("INIT - " + movieReaders.size());
+		int count = 0;
+		for(MovieReader movieReader : movieReaders) {
+			if(StringUtils.isNotBlank(movieReader.getAbsolutePath())) {
+				try {
+					System.out.println(count++);
+					IContainer container = IContainer.make();
+					int result = container.open(movieReader.getAbsolutePath(), IContainer.Type.READ, null);
+					if(result >= 0) {
+						int numStreams = container.getNumStreams();
+
+				    	for (int i = 0; i < numStreams; i++) {
+				    		IStream stream = container.getStream(i);
+				    		IStreamCoder coder = stream.getStreamCoder();
+				    		
+				    		if (coder.getCodecType() == ICodec.Type.CODEC_TYPE_AUDIO) {
+				    			codecs.add(String.valueOf(coder.getSampleRate()));
+				    		} 
+				    		/*
+				    		if (coder.getCodecType() == ICodec.Type.CODEC_TYPE_VIDEO) {
+				    			System.out.printf("width: %d; ", coder.getWidth());
+				    			System.out.printf("height: %d; ", coder.getHeight());
+				    		}
+				    		*/
+				    	}
+					}
+				} catch(final Exception e) {
+					// BOOM
+					System.out.println("OUT - " + movieReader.getAbsolutePath());
+				}
+			}	
+		}
+		
+		for(String codec : codecs) {
+			System.out.println("SAMPLE_RATE_CODEC_CONVERTER.put(" + codec + ", \"\");");
+		}
+		
+		System.out.println("END");
     }
 }
