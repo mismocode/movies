@@ -28,18 +28,8 @@ import es.mismocode.movies.services.MetaDataService;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.xuggle.mediatool.IMediaReader;
-import com.xuggle.mediatool.ToolFactory;
-import com.xuggle.xuggler.IContainer;
-import com.xuggle.xuggler.IStream;
-import com.xuggle.xuggler.IStreamCoder;
-import com.xuggle.xuggler.ICodec;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -53,10 +43,9 @@ import javafx.stage.Stage;
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setTitle("Vista Viewer");
-
+        stage.setTitle("Movies");
+        stage.setMinWidth(600);
         stage.setScene(createScene(loadMainPane()));
-
         stage.show();
     }
 
@@ -104,8 +93,8 @@ public class MainApplication extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    	test();
-        //launch(args);
+    	//test();
+        launch(args);
     }
     
     private static void test() {
@@ -119,8 +108,8 @@ public class MainApplication extends Application {
 			if(StringUtils.isNotBlank(movieReader.getFilename()) && StringUtils.isNotBlank(movieReader.getExtension())) {
 				String movieLink = filmAffinityParser.getURLOfMovie(movieReader.getFilename().toLowerCase().replace("." + movieReader.getExtension().toLowerCase(), ""));
 				if(movieLink != null) {
-					Movie movie = filmAffinityParser.getMovie(movieLink, null);
 					System.out.println(movieLink);
+					Movie movie = filmAffinityParser.getMovie(movieLink, null);
 					if(movie != null) {
 						movie.saveImages(properties.getSavePathIconCountries(), properties.getSavePathImages());
 						movie.setMetaData(metaDataService.getMetaData(movieReader.getAbsolutePath()));

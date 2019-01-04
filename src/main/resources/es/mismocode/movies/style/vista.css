@@ -34,6 +34,11 @@
 
 #vista1 {
     -fx-background-color: aliceblue;
+	-fx-padding: 20 20 20 20;
+}
+
+#resourcesBox {
+	-fx-padding: 20 0 0 0;	
 }
 
 #vista2 {

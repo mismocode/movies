@@ -3,9 +3,18 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.StackPane?>
 <?scenebuilder-stylesheet '../style/vista.css'?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
 
-<StackPane fx:id="vista1" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.mismocode.movies.controller.Vista1Controller">
+<StackPane fx:id="vista1" alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.mismocode.movies.controller.Vista1Controller">
   <children>
-    <Button mnemonicParsing="false" onAction="#nextPane" text="Next Pane" />
+  	<Label>Carpeta origen:</Label>
+  	<HBox id="resourcesBox" prefWidth="600">
+  		<children>
+  			<TextField fx:id="resourcePathTextField" onKeyReleased="#onResourcePathChange" minWidth="450"/>
+  			<Button fx:id="resourcePathButton" text="Seleccionar" onMouseClicked="#onResourcePathSelect"/>
+  		</children>
+  	</HBox>
   </children>
 </StackPane>

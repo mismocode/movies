@@ -41,8 +41,8 @@ public class FilmAffinityParser implements WebParser {
 					Element link = links.first();
 					if(link != null && link.hasText()) {
 						String googleTitleMovie = link.text();
-						if((googleTitleMovie.contains("- FilmAffinity") && cosineDistance.apply(name + "- FilmAffinity", googleTitleMovie) < 0.6) ||
-								(!googleTitleMovie.contains("- FilmAffinity") && cosineDistance.apply(name, googleTitleMovie) < 0.7)) {
+						if((googleTitleMovie.contains("- FilmAffinity") && cosineDistance.apply((name + "- FilmAffinity").toLowerCase(), googleTitleMovie.toLowerCase()) < 0.6) ||
+								(!googleTitleMovie.contains("- FilmAffinity") && cosineDistance.apply(name, googleTitleMovie.toLowerCase()) < 0.7)) {
 							String result = link.absUrl("href");
 							result = URLDecoder.decode(result.substring(result.indexOf('=') + 1, result.indexOf('&')), "UTF-8");
 							if(result.startsWith("http") && result.contains("www.filmaffinity.com/es/film")) {

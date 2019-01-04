@@ -7,7 +7,6 @@
 
 <VBox prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.mismocode.movies.controller.MainController">
   <children>
-    <Label fx:id="headerLabel" maxWidth="1.7976931348623157E308" text="Header" VBox.vgrow="NEVER" />
-    <StackPane fx:id="vistaHolder" VBox.vgrow="ALWAYS" />
+    <StackPane fx:id="vistaHolder" alignment="TOP_LEFT" VBox.vgrow="ALWAYS" />
   </children>
 </VBox>
