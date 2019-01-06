@@ -41,6 +41,14 @@
 	-fx-padding: 20 0 0 0;	
 }
 
+#destinationBox {
+	-fx-padding: 20 0 0 0;	
+}
+
+#resourcePathButton, #destinationButton {
+	-fx-font-size: 12;
+}
+
 #vista2 {
     -fx-background-color: coral;
 }

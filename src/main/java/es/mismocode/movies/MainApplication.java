@@ -18,18 +18,9 @@
  */
 package es.mismocode.movies;
 
-import es.mismocode.movies.configuration.Properties;
 import es.mismocode.movies.controller.MainController;
-import es.mismocode.movies.model.Movie;
-import es.mismocode.movies.model.MovieReader;
-import es.mismocode.movies.parser.FilmAffinityParser;
-import es.mismocode.movies.services.FileReader;
-import es.mismocode.movies.services.MetaDataService;
 
 import java.io.IOException;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -41,8 +32,11 @@ import javafx.stage.Stage;
  * Main application class.
  */
 public class MainApplication extends Application {
+	public static Stage primaryStage;
+    
     @Override
     public void start(Stage stage) throws Exception {
+    	primaryStage = stage;
         stage.setTitle("Movies");
         stage.setMinWidth(600);
         stage.setScene(createScene(loadMainPane()));
@@ -92,9 +86,10 @@ public class MainApplication extends Application {
      *
      * @param args the command line arguments
      */
+    /*
     public static void main(String[] args) {
-    	//test();
-        launch(args);
+    	test();
+        //launch(args);
     }
     
     private static void test() {
@@ -119,8 +114,5 @@ public class MainApplication extends Application {
 			}
 		}
     }
-    
-    private static void test2() {
-    	// TODO
-    }
+    */
 }

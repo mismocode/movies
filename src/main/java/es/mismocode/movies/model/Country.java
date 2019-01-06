@@ -2,13 +2,30 @@ package es.mismocode.movies.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "country")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Country implements Serializable {
 	private static final long serialVersionUID = 6132787662169021538L;
 
+	@XmlAttribute(name = "id")
 	private String id;
+	
+	@XmlElement(name = "name")
 	private String name;
+	
+	@XmlElement(name = "iconPath")
 	private String iconPath;
+	
+	@XmlElement(name = "extension")
 	private String extension;
+	
+	public Country() {}
 	
 	public Country(final String id, final String name, final String iconPath, final String extension) {
 		this.id = id;
@@ -31,10 +48,5 @@ public class Country implements Serializable {
 
 	public String getExtension() {
 		return extension;
-	}
-
-	@Override
-	public String toString() {
-		return "Country [id=" + id + ", name=" + name + ", iconPath=" + iconPath + ", extension=" + extension + "]";
 	}
 }

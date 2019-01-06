@@ -20,6 +20,7 @@ package es.mismocode.movies.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -31,7 +32,7 @@ public class MainController {
      * Holder of a switchable vista.
      */
     @FXML
-    private StackPane vistaHolder;
+    private Pane vistaHolder;
 
     /**
      * Replaces the vista displayed in the vista holder with a new vista.

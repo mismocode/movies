@@ -2,22 +2,36 @@ package es.mismocode.movies.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "movieMetaData")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MovieMetaData implements Serializable {
 	private static final long serialVersionUID = 6132776662269021538L;
 
+	@XmlElement(name = "videoCodec")
 	private String videoCodec;
+	
+	@XmlElement(name = "videoWidth")
 	private int videoWidth;
+	
+	@XmlElement(name = "videoHeight")
 	private int videoHeight;
+	
+	@XmlElement(name = "audioCodec")
 	private String audioCodec;
+	
+	@XmlElement(name = "audioSampleRate")
 	private String audioSampleRate;
+	
+	@XmlElement(name = "audioChannels")
 	private String audioChannels;
 	
-	@Override
-	public String toString() {
-		return "MovieMetaData [videoCodec=" + videoCodec + ", videoWidth=" + videoWidth + ", videoHeight=" + videoHeight
-				+ ", audioCodec=" + audioCodec + ", audioSampleRate=" + audioSampleRate + ", audioChannels="
-				+ audioChannels + "]";
-	}
+	public MovieMetaData() {}
+	
 	public String getVideoCodec() {
 		return videoCodec;
 	}

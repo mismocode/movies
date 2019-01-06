@@ -16,6 +16,7 @@ import org.jsoup.select.Elements;
 
 import es.mismocode.movies.model.Country;
 import es.mismocode.movies.model.Movie;
+import es.mismocode.movies.model.MovieLink;
 import es.mismocode.movies.model.Score;
 import es.mismocode.movies.model.Web;
 
@@ -27,7 +28,7 @@ public class FilmAffinityParser implements WebParser {
 	private CosineDistance cosineDistance = new CosineDistance();
 
 	@Override
-	public String getURLOfMovie(final String name) {
+	public MovieLink getURLOfMovie(final String name) {
 		try {
 			if(StringUtils.isNotBlank(name)) {	
 				final Elements links = Jsoup.connect(GOOGLE_BASE_URL_PATH + URLEncoder.encode(name + " host:www.filmaffinity.com/es/film", "UTF-8"))
@@ -46,7 +47,7 @@ public class FilmAffinityParser implements WebParser {
 							String result = link.absUrl("href");
 							result = URLDecoder.decode(result.substring(result.indexOf('=') + 1, result.indexOf('&')), "UTF-8");
 							if(result.startsWith("http") && result.contains("www.filmaffinity.com/es/film")) {
-								return result;
+								return new MovieLink(name, googleTitleMovie.replace("- FilmAffinity", ""), result);
 							}
 						}
 					}
@@ -122,7 +123,7 @@ public class FilmAffinityParser implements WebParser {
 	private String getOriginalTitle(final Document doc) {
 		final Element originalTitle = doc.selectFirst("body dl.movie-info dd");
 		if(originalTitle != null && originalTitle.hasText()) {
-			return originalTitle.text();
+			return originalTitle.text().replace(" aka", "");
 		}
 		return null;
 	}

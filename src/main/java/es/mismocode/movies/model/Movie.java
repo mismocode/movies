@@ -9,35 +9,74 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "movie")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Movie implements Serializable {
 	private static final long serialVersionUID = 6132787662269021538L;
-	
-	private String url;
-	private String imagePath;
+
+	@XmlElement(name = "title")
 	private String title;
+	
+	@XmlElement(name = "originalTitle")
 	private String originalTitle;
-	private int year;
-	private List<Country> countries;
-	private int minutes;
-	private List<String> directors;
-	private List<String> screenwriters;
-	private List<String> music;
-	private List<String> cast;
-	private List<String> producers;
-	private List<String> genres;
-	private String oficialWeb;
-	private String synopsis;
+	
+	@XmlElement(name="score")
 	private List<Score> scores;
+	
+	@XmlElement(name = "year")
+	private int year;
+	
+	@XmlElement(name = "minutes")
+	private int minutes;
+	
+	@XmlElementWrapper(name="genres")
+    @XmlElement(name="genre")
+	private List<String> genres;
+	
+	@XmlElement(name = "url")
+	private String url;
+	
+	@XmlElement(name = "oficialWeb")
+	private String oficialWeb;
+	
+	@XmlElement(name = "imagePath")
+	private String imagePath;
+	
+	@XmlElement(name="country")
+	private List<Country> countries;
+	
+	@XmlElementWrapper(name="directors")
+    @XmlElement(name="director")
+	private List<String> directors;
+	
+	@XmlElementWrapper(name="screenwriters")
+    @XmlElement(name="screenwriter")
+	private List<String> screenwriters;
+	
+	@XmlElementWrapper(name="music")
+    @XmlElement(name="musician")
+	private List<String> music;
+	
+	@XmlElementWrapper(name="cast")
+    @XmlElement(name="actor")
+	private List<String> cast;
+	
+	@XmlElementWrapper(name="producers")
+    @XmlElement(name="producer")
+	private List<String> producers;
+	
+	@XmlElement(name = "synopsis")
+	private String synopsis;
+	
 	private MovieMetaData metaData;
 	
-	@Override
-	public String toString() {
-		return "Movie [url=" + url + ", imagePath=" + imagePath + ", title=" + title + ", originalTitle="
-				+ originalTitle + ", year=" + year + ", countries=" + countries + ", minutes=" + minutes
-				+ ", directors=" + directors + ", screenwriters=" + screenwriters + ", music=" + music + ", cast="
-				+ cast + ", producers=" + producers + ", genres=" + genres + ", oficialWeb=" + oficialWeb
-				+ ", synopsis=" + synopsis + ", scores=" + scores + ", metaData=" + metaData + "]";
-	}
+	public Movie() {}
 
 	public String getUrl() {
 		return url;

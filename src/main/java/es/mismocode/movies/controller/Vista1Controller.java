@@ -19,29 +19,31 @@
 package es.mismocode.movies.controller;
 
 import java.io.File;
-import java.util.EventObject;
 
+import es.mismocode.movies.MainApplication;
 import es.mismocode.movies.VistaNavigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
 
 /**
  * Controller class for the first vista.
  */
 public class Vista1Controller {
 	
-	private DirectoryChooser directoryChooser;
-	
 	@FXML
 	private TextField resourcePathTextField;
 	
 	@FXML
 	private Button resourcePathButton;
+	
+	@FXML
+	private TextField destinationTextField;
+	
+	@FXML
+	private Button destinationButton;
 
     /**
      * Event handler fired when the user requests a new vista.
@@ -60,16 +62,30 @@ public class Vista1Controller {
     }
     
     @FXML
-    void onResourcePathSelect() {
-    	// TODO
-    	/*
-    	File selectedDirectory = this.directoryChooser.showDialog((Stage)((Node)((EventObject) eventVariable).getSource()).getScene().getWindow());
+    void onResourcePathSelect(ActionEvent event) {
+    	DirectoryChooser directoryChooser = new DirectoryChooser();
+    	File selectedDirectory = directoryChooser.showDialog(MainApplication.primaryStage);
     	if(selectedDirectory == null){
-            labelSelectedDirectory.setText("No Directory selected");
+            this.resourcePathTextField.setText(null);
         }else{
-            labelSelectedDirectory.setText(selectedDirectory.getAbsolutePath());
+        	this.resourcePathTextField.setText(selectedDirectory.getAbsolutePath());
         }
-        */
     }
-
+    
+    @FXML
+    void onDestinationChange() {
+    	// TODO
+    	System.out.println(this.destinationTextField.getText());
+    }
+    
+    @FXML
+    void onDestinationSelect(ActionEvent event) {
+    	DirectoryChooser directoryChooser = new DirectoryChooser();
+    	File selectedDirectory = directoryChooser.showDialog(MainApplication.primaryStage);
+    	if(selectedDirectory == null){
+            this.destinationTextField.setText(null);
+        }else{
+        	this.destinationTextField.setText(selectedDirectory.getAbsolutePath());
+        }
+    }
 }

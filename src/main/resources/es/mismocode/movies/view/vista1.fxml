@@ -6,15 +6,27 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
 
 <StackPane fx:id="vista1" alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.mismocode.movies.controller.Vista1Controller">
   <children>
-  	<Label>Carpeta origen:</Label>
-  	<HBox id="resourcesBox" prefWidth="600">
-  		<children>
-  			<TextField fx:id="resourcePathTextField" onKeyReleased="#onResourcePathChange" minWidth="450"/>
-  			<Button fx:id="resourcePathButton" text="Seleccionar" onMouseClicked="#onResourcePathSelect"/>
-  		</children>
-  	</HBox>
+  	<Pane>
+  		<Label>Carpeta origen:</Label>
+  		<HBox id="resourcesBox" prefWidth="600">
+  			<children>
+  				<TextField fx:id="resourcePathTextField" onKeyReleased="#onResourcePathChange" minWidth="450"/>
+  				<Button fx:id="resourcePathButton" prefWidth="94" text="Seleccionar" onAction="#onResourcePathSelect"/>
+  			</children>
+  		</HBox>
+  	</Pane>
+  	<Pane>
+  		<Label>Carpeta destino:</Label>
+  		<HBox id="destinationBox" prefWidth="600">
+  			<children>
+  				<TextField fx:id="destinationTextField" onKeyReleased="#onDestinationChange" minWidth="450"/>
+  				<Button fx:id="destinationButton" prefWidth="94" text="Seleccionar" onAction="#onDestinationSelect"/>
+  			</children>
+  		</HBox>
+  	</Pane>
   </children>
 </StackPane>
