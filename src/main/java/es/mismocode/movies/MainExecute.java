@@ -3,7 +3,6 @@ package es.mismocode.movies;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
@@ -12,6 +11,7 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,6 +33,7 @@ public class MainExecute {
 	private static String resourcePath;
 	private static String destinePath;
 	private static String singleURL;
+	private static String singleMovie;
 	private static int blockMovies;
 	private static String moviesPath;
 	
@@ -48,6 +49,8 @@ public class MainExecute {
 						break;
 					case "-s":
 						singleURL = args[++i];
+					case "-f":
+						singleMovie = args[++i];
 						break;
 					case "-m":
 						moviesPath = args[++i];
@@ -58,7 +61,7 @@ public class MainExecute {
 				}
 			}
 			
-			if(StringUtils.isNotBlank(singleURL)) {
+			if(StringUtils.isNotBlank(singleURL) && StringUtils.isNotBlank(singleMovie)) {
 				fillSingleMovie();
 			}
 			
@@ -69,7 +72,52 @@ public class MainExecute {
 	}
 	
 	private static void fillSingleMovie() {
-		// TODO
+		FilmAffinityParser filmAffinityParser = new FilmAffinityParser();
+    	MetaDataService metaDataService = new MetaDataService();
+
+    	createFolders();
+		
+    	LocalDateTime now = LocalDateTime.now();
+    	System.out.println("INIT");
+    	System.out.println("-------------------------------------------------------------");
+		
+    	movies = obatinMovies();
+    	
+    	now = LocalDateTime.now();
+		System.out.println("Processing... - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
+		
+		Movie movie = filmAffinityParser.getMovie(singleURL, null);
+		
+		if(movie != null) {
+			
+			boolean exist = false;
+			if(movies.getMovies() != null && movies.getMovies().stream().anyMatch((movie2) -> 
+				movie.getUrl().equals(movie2.getUrl())
+			)) {
+				System.out.println("---The movie already exists---");
+				exist = true;
+			}
+			
+			if(!exist) {
+				now = LocalDateTime.now();
+				System.out.println("Processed! - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
+				
+				System.out.println("Saving images...");
+				movie.saveImages(destinePath + "\\icons\\", destinePath + "\\images\\");
+				movie.setMetaData(metaDataService.getMetaData(singleMovie));
+				movies.add(movie);
+				System.out.println("Saved!");
+				
+				if(movies.getMovies() != null && !movies.getMovies().isEmpty()) {
+					jaxbObjectToXML("\\newMovies.xml", Movies.class, movies);
+				}
+			}
+			
+		}
+				
+		System.out.println("-------------------------------------------------------------");
+		
+		System.out.println("END");
 	}
 	
 	private static void fillPathMovies() {
@@ -90,12 +138,15 @@ public class MainExecute {
     	System.out.println("Search finished! Total of movies: " + movieReaders.size() + " - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
     	System.out.println("-------------------------------------------------------------");
     	
+    	movies = obatinMovies();
+    	
+    	int count = 1;
 		for(int i = (50*(blockMovies - 1)); i < blockMovies*50 && i < movieReaders.size(); i++) {
 			MovieReader movieReader = movieReaders.get(i);
 			if(StringUtils.isNotBlank(movieReader.getFilename()) && StringUtils.isNotBlank(movieReader.getExtension())) {
 				
 				now = LocalDateTime.now();
-				System.out.println("Finding in Google... - " + movieReader.getFilename() + " - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
+				System.out.println(count++ + ". Finding in Google... - " + movieReader.getFilename() + " - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
 				
 				MovieLink movieLink = filmAffinityParser.getURLOfMovie(movieReader.getFilename().toLowerCase().replace("." + movieReader.getExtension().toLowerCase(), ""));
 				
@@ -107,14 +158,24 @@ public class MainExecute {
 					Movie movie = filmAffinityParser.getMovie(movieLink.getLink(), null);
 					if(movie != null) {
 						
-						now = LocalDateTime.now();
-						System.out.println("Processed! - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
+						boolean exist = false;
+						if(movies.getMovies() != null && movies.getMovies().stream().anyMatch((movie2) -> 
+							movie.getUrl().equals(movie2.getUrl())
+						)) {
+							System.out.println("---The movie already exists---");
+							exist = true;
+						}
 						
-						System.out.println("Saving images...");
-						movie.saveImages(destinePath + "\\icons\\", destinePath + "\\images\\");
-						movie.setMetaData(metaDataService.getMetaData(movieReader.getAbsolutePath()));
-						movies.add(movie);
-						System.out.println("Saved!");
+						if(!exist) {
+							now = LocalDateTime.now();
+							System.out.println("Processed! - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
+							
+							System.out.println("Saving images...");
+							movie.saveImages(destinePath + "\\icons\\", destinePath + "\\images\\");
+							movie.setMetaData(metaDataService.getMetaData(movieReader.getAbsolutePath()));
+							movies.add(movie);
+							System.out.println("Saved!");
+						}
 						
 					} else {
 						if(StringUtils.isNotBlank(movieReader.getAbsolutePath())) {
@@ -135,7 +196,7 @@ public class MainExecute {
 		}
 		
 		if(movies.getMovies() != null && !movies.getMovies().isEmpty()) {
-			jaxbObjectToXML("\\movies.xml", Movies.class, movies);
+			jaxbObjectToXML("\\newMovies.xml", Movies.class, movies);
 		}
 		
 		if(discardedMovies.getDiscardedMovies() != null && !discardedMovies.getDiscardedMovies().isEmpty()) {
@@ -148,12 +209,12 @@ public class MainExecute {
 	private static void createFolders() {
 		try {			
     		File icons = new File(destinePath + "\\icons");
-    		if(icons.exists() && icons.isDirectory()) {
+    		if(!icons.exists() || !icons.isDirectory()) {
     			Files.createDirectories(Paths.get(destinePath + "\\icons"));
     		}
 
     		File images = new File(destinePath + "\\images");
-    		if(images.exists() && images.isDirectory()) {
+    		if(!images.exists() || !images.isDirectory()) {
     			Files.createDirectories(Paths.get(destinePath + "\\images"));
     		}
 		} catch (IOException e) {
@@ -172,4 +233,22 @@ public class MainExecute {
             e.printStackTrace();
         }
     }
+	
+	private static Movies obatinMovies() {
+		if(StringUtils.isNotBlank(moviesPath)) {
+			try {
+				File file = new File(moviesPath);
+		        JAXBContext jaxbContext = JAXBContext.newInstance(Movies.class);
+
+		        Unmarshaller jaxbUnmarshaller;
+				jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+		        return (Movies) jaxbUnmarshaller.unmarshal(file);
+			} catch (JAXBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return new Movies();
+	}
 }
