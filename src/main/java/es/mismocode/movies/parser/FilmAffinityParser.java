@@ -206,10 +206,18 @@ public class FilmAffinityParser implements WebParser {
 		if(doc.select("body dl.movie-info dt").eachText().contains("Productora")) {
 			final Elements sub = doc.select("body dl.movie-info dd div.credits");
 			Elements producers = null;
-			if(doc.select("body dl.movie-info dt").eachText().contains("Fotografía")) {
-				producers = sub.get(3).select("span.nb span");
+			if(doc.select("body dl.movie-info dt").eachText().contains("Música")) {
+				if(doc.select("body dl.movie-info dt").eachText().contains("Fotografía")) {
+					producers = sub.get(3).select("span.nb span");
+				} else {
+					producers = sub.get(2).select("span.nb span");
+				}
 			} else {
-				producers = sub.get(2).select("span.nb span");
+				if(doc.select("body dl.movie-info dt").eachText().contains("Fotografía")) {
+					producers = sub.get(2).select("span.nb span");
+				} else {
+					producers = sub.get(1).select("span.nb span");
+				}
 			}
 			if(!producers.isEmpty() && producers.hasText()) {
 				List<String> result = new ArrayList<String>();

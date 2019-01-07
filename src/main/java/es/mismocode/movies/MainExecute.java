@@ -33,6 +33,7 @@ public class MainExecute {
 	private static String resourcePath;
 	private static String destinePath;
 	private static String singleURL;
+	private static int blockMovies;
 	private static String moviesPath;
 	
 	public static void main(String[] args) {
@@ -50,6 +51,9 @@ public class MainExecute {
 						break;
 					case "-m":
 						moviesPath = args[++i];
+						break;
+					case "-b":
+						blockMovies = Integer.valueOf(args[++i]);
 						break;
 				}
 			}
@@ -86,7 +90,8 @@ public class MainExecute {
     	System.out.println("Search finished! Total of movies: " + movieReaders.size() + " - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
     	System.out.println("-------------------------------------------------------------");
     	
-		for(MovieReader movieReader : movieReaders) {
+		for(int i = (50*(blockMovies - 1)); i < blockMovies*50 && i < movieReaders.size(); i++) {
+			MovieReader movieReader = movieReaders.get(i);
 			if(StringUtils.isNotBlank(movieReader.getFilename()) && StringUtils.isNotBlank(movieReader.getExtension())) {
 				
 				now = LocalDateTime.now();
@@ -94,7 +99,7 @@ public class MainExecute {
 				
 				MovieLink movieLink = filmAffinityParser.getURLOfMovie(movieReader.getFilename().toLowerCase().replace("." + movieReader.getExtension().toLowerCase(), ""));
 				
-				if(StringUtils.isNotBlank(movieLink.getLink())) {
+				if(movieLink != null && StringUtils.isNotBlank(movieLink.getLink())) {
 					
 					now = LocalDateTime.now();
 					System.out.println("Founed: " + movieLink.getFilenameFound() + " - Processing... - " + movieLink.getLink() + " - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
@@ -141,12 +146,16 @@ public class MainExecute {
 	}
 	
 	private static void createFolders() {
-		try {
-    		Path path = Paths.get(destinePath + "\\icons");
-			Files.createDirectories(path);
+		try {			
+    		File icons = new File(destinePath + "\\icons");
+    		if(icons.exists() && icons.isDirectory()) {
+    			Files.createDirectories(Paths.get(destinePath + "\\icons"));
+    		}
 
-    		path = Paths.get(destinePath + "\\images");
-			Files.createDirectories(path);
+    		File images = new File(destinePath + "\\images");
+    		if(images.exists() && images.isDirectory()) {
+    			Files.createDirectories(Paths.get(destinePath + "\\images"));
+    		}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
