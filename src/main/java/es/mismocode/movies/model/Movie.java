@@ -20,6 +20,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Movie implements Serializable {
 	private static final long serialVersionUID = 6132787662269021538L;
 
+	@XmlElement(name = "id")
+	private int id;
+	
 	@XmlElement(name = "title")
 	private String title;
 	
@@ -77,6 +80,14 @@ public class Movie implements Serializable {
 	private MovieMetaData metaData;
 	
 	public Movie() {}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getUrl() {
 		return url;

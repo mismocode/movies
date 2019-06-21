@@ -1,5 +1,6 @@
 package es.mismocode.movies.services;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class MetaDataService {
 					int numStreams = container.getNumStreams();
 
 					MovieMetaData movieMetaData = new MovieMetaData();
+					movieMetaData.setSize(new Double(new File(filename).length()/(1024 * 1024)).intValue());
 			    	for (int i = 0; i < numStreams; i++) {
 			    		IStream stream = container.getStream(i);
 			    		IStreamCoder coder = stream.getStreamCoder();
@@ -59,6 +61,7 @@ public class MetaDataService {
 			    			movieMetaData.setAudioCodec(AUDIO_CODEC_CONVERTER.get(coder.getCodecID()));
 			    			movieMetaData.setAudioChannels(CHANNELS_CONVERTER.get(coder.getChannels()));
 			    			movieMetaData.setAudioSampleRate(SAMPLE_RATE_CODEC_CONVERTER.get(coder.getSampleRate()));
+			    			movieMetaData.setAudioSampleRateOriginal(coder.getSampleRate());
 			    			isAudioFilled = true;
 			    		} else if (!isVideoFilled && coder.getCodecType() == ICodec.Type.CODEC_TYPE_VIDEO) {
 			    			movieMetaData.setVideoCodec(VIDEO_CODEC_CONVERTER.get(coder.getCodecID()));

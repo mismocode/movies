@@ -26,12 +26,34 @@ public class MovieMetaData implements Serializable {
 	
 	@XmlElement(name = "audioSampleRate")
 	private String audioSampleRate;
+
+	@XmlElement(name = "audioSampleRateOriginal")
+	private int audioSampleRateOriginal;
 	
 	@XmlElement(name = "audioChannels")
 	private String audioChannels;
 	
-	public MovieMetaData() {}
+	@XmlElement(name = "sizeInMB")
+	private Integer size;
 	
+	public MovieMetaData() {}
+
+	public int getAudioSampleRateOriginal() {
+		return audioSampleRateOriginal;
+	}
+
+	public void setAudioSampleRateOriginal(int audioSampleRateOriginal) {
+		this.audioSampleRateOriginal = audioSampleRateOriginal;
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
+	}
+
 	public String getVideoCodec() {
 		return videoCodec;
 	}

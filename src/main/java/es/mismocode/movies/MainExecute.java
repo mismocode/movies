@@ -22,6 +22,8 @@ import es.mismocode.movies.model.MovieLink;
 import es.mismocode.movies.model.MovieReader;
 import es.mismocode.movies.model.Movies;
 import es.mismocode.movies.parser.FilmAffinityParser;
+import es.mismocode.movies.services.CSVReaderService;
+import es.mismocode.movies.services.CSVWriterService;
 import es.mismocode.movies.services.FileReader;
 import es.mismocode.movies.services.MetaDataService;
 
@@ -36,27 +38,35 @@ public class MainExecute {
 	private static String singleMovie;
 	private static int blockMovies;
 	private static String moviesPath;
+	private static String moviesType = "CSV";
+	private static int initialID = 1;
 	
 	public static void main(String[] args) {
 		if(args != null && args.length > 0) {
 			for(int i = 0; i < args.length; i++) {
 				switch(args[i]) {
 					case "-in":
-						resourcePath = args[++i];
+						resourcePath = args[i + 1];
 						break;
 					case "-out":
-						destinePath = args[++i];
+						destinePath = args[i + 1];
 						break;
 					case "-s":
-						singleURL = args[++i];
+						singleURL = args[i + 1];
 					case "-f":
-						singleMovie = args[++i];
+						singleMovie = args[i + 1];
 						break;
 					case "-m":
-						moviesPath = args[++i];
+						moviesPath = args[i + 1];
+						break;
+					case "-t":
+						moviesType = args[i + 1];
+						break;
+					case "-i":
+						initialID = Integer.valueOf(args[i + 1]);
 						break;
 					case "-b":
-						blockMovies = Integer.valueOf(args[++i]);
+						blockMovies = Integer.valueOf(args[i + 1]);
 						break;
 				}
 			}
@@ -99,6 +109,7 @@ public class MainExecute {
 			}
 			
 			if(!exist) {
+				movie.setId(initialID);
 				now = LocalDateTime.now();
 				System.out.println("Processed! - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
 				
@@ -109,7 +120,11 @@ public class MainExecute {
 				System.out.println("Saved!");
 				
 				if(movies.getMovies() != null && !movies.getMovies().isEmpty()) {
-					jaxbObjectToXML("\\newMovies.xml", Movies.class, movies);
+					if(moviesType.equals("CSV")) {
+						objectToCSV("\\newMovies.csv", movies);
+					} else {
+						jaxbObjectToXML("\\newMovies.xml", Movies.class, movies);
+					}
 				}
 			}
 			
@@ -167,6 +182,7 @@ public class MainExecute {
 						}
 						
 						if(!exist) {
+							movie.setId(initialID + i);
 							now = LocalDateTime.now();
 							System.out.println("Processed! - " + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "." + now.get(ChronoField.MILLI_OF_SECOND));
 							
@@ -196,7 +212,11 @@ public class MainExecute {
 		}
 		
 		if(movies.getMovies() != null && !movies.getMovies().isEmpty()) {
-			jaxbObjectToXML("\\newMovies.xml", Movies.class, movies);
+			if(moviesType.equals("CSV")) {
+				objectToCSV("\\newMovies.csv", movies);
+			} else {
+				jaxbObjectToXML("\\newMovies.xml", Movies.class, movies);
+			}
 		}
 		
 		if(discardedMovies.getDiscardedMovies() != null && !discardedMovies.getDiscardedMovies().isEmpty()) {
@@ -218,7 +238,6 @@ public class MainExecute {
     			Files.createDirectories(Paths.get(destinePath + "\\images"));
     		}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -234,19 +253,28 @@ public class MainExecute {
         }
     }
 	
+	private static void objectToCSV(final String filename, final Movies movies) {
+        CSVWriterService writerService = new CSVWriterService(destinePath + filename, movies);
+        writerService.write();
+    }
+	
 	private static Movies obatinMovies() {
 		if(StringUtils.isNotBlank(moviesPath)) {
-			try {
-				File file = new File(moviesPath);
-		        JAXBContext jaxbContext = JAXBContext.newInstance(Movies.class);
+			if(moviesType.equals("CSV")) {
+				CSVReaderService service = new CSVReaderService(moviesPath);
+				return service.read();
+			} else {
+				try {
+					File file = new File(moviesPath);
+			        JAXBContext jaxbContext = JAXBContext.newInstance(Movies.class);
 
-		        Unmarshaller jaxbUnmarshaller;
-				jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			        Unmarshaller jaxbUnmarshaller;
+					jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-		        return (Movies) jaxbUnmarshaller.unmarshal(file);
-			} catch (JAXBException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			        return (Movies) jaxbUnmarshaller.unmarshal(file);
+				} catch (JAXBException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return new Movies();
